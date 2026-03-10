@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Dieta Semanal 🇲🇽</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --verde: #2d6a4f;
+            --verde-light: #52b788;
+            --verde-pale: #d8f3dc;
+            --naranja: #e76f51;
+            --naranja-light: #f4a261;
+            --crema: #fefae0;
+            --crema-dark: #f5edd6;
+            --tierra: #6b4226;
+            --tierra-light: #a67c52;
+            --blanco: #fffef9;
+            --texto: #2c2c2c;
+            --texto-light: #5c5c5c;
+            --sombra: rgba(45, 106, 79, 0.08);
+            --radius: 20px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--crema);
+            color: var(--texto);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ====== HERO ====== */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(82, 183, 136, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(231, 111, 81, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(244, 162, 97, 0.1) 0%, transparent 50%),
+                var(--crema);
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                radial-gradient(circle at 15% 25%, var(--verde-light) 1px, transparent 1px),
+                radial-gradient(circle at 85% 75%, var(--naranja) 1px, transparent 1px),
+                radial-gradient(circle at 50% 10%, var(--tierra-light) 1px, transparent 1px);
+            background-size: 120px 120px, 150px 150px, 100px 100px;
+            opacity: 0.15;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--verde);
+            color: white;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            position: relative;
+            animation: fadeDown 0.8s ease-out;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            line-height: 1.05;
+            margin-bottom: 1rem;
+            position: relative;
+            animation: fadeUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--naranja), var(--naranja-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-sub {
+            font-size: 1.2rem;
+            color: var(--texto-light);
+            max-width: 500px;
+            position: relative;
+            animation: fadeUp 0.8s ease-out 0.4s both;
+        }
+
+        .hero-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            font-size: 2rem;
+            position: relative;
+            animation: fadeUp 0.8s ease-out 0.6s both;
+        }
+
+        .hero-icons span {
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+        .hero-icons span:nth-child(2) { animation-delay: 0.3s; }
+        .hero-icons span:nth-child(3) { animation-delay: 0.6s; }
+        .hero-icons span:nth-child(4) { animation-delay: 0.9s; }
+        .hero-icons span:nth-child(5) { animation-delay: 1.2s; }
+        .hero-icons span:nth-child(6) { animation-delay: 1.5s; }
+        .hero-icons span:nth-child(7) { animation-delay: 1.8s; }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            animation: bounce 2s ease-in-out infinite;
+            font-size: 1.5rem;
+            opacity: 0.5;
+        }
+
+        /* ====== NAV STICKY ====== */
+        .day-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(254, 250, 224, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(45, 106, 79, 0.1);
+            padding: 0.8rem 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+        }
+
+        .day-nav a {
+            text-decoration: none;
+            padding: 0.45rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--texto-light);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .day-nav a:hover, .day-nav a.active {
+            background: var(--verde);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        /* ====== CONTENIDO ====== */
+        .content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        /* ====== DÍA ====== */
+        .day-section {
+            margin-bottom: 3rem;
+            scroll-margin-top: 5rem;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .day-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid var(--verde-light);
+        }
+
+        .day-emoji {
+            font-size: 2.5rem;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--verde-pale);
+            border-radius: 16px;
+            flex-shrink: 0;
+        }
+
+        .day-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--verde);
+        }
+
+        .day-header .day-number {
+            font-size: 0.85rem;
+            color: var(--texto-light);
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 500;
+        }
+
+        /* ====== MEAL CARD ====== */
+        .meal-card {
+            background: var(--blanco);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 20px var(--sombra);
+            border: 1px solid rgba(45, 106, 79, 0.06);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .meal-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            border-radius: 4px 0 0 4px;
+        }
+
+        .meal-card.desayuno::before { background: var(--naranja); }
+        .meal-card.colacion::before { background: var(--verde-light); }
+        .meal-card.comida::before { background: var(--tierra); }
+        .meal-card.cena::before { background: #7b68ae; }
+
+        .meal-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(45, 106, 79, 0.12);
+        }
+
+        .meal-type {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.6rem;
+        }
+
+        .meal-card.desayuno .meal-type { color: var(--naranja); }
+        .meal-card.colacion .meal-type { color: var(--verde-light); }
+        .meal-card.comida .meal-type { color: var(--tierra); }
+        .meal-card.cena .meal-type { color: #7b68ae; }
+
+        .meal-type .meal-icon {
+            font-size: 1.1rem;
+        }
+
+        .meal-desc {
+            font-size: 1rem;
+            color: var(--texto);
+            line-height: 1.7;
+        }
+
+        .meal-desc strong {
+            color: var(--verde);
+        }
+
+        /* ====== TIPS SECTION ====== */
+        .tips-section {
+            margin-top: 4rem;
+            scroll-margin-top: 5rem;
+        }
+
+        .tips-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .tips-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: var(--naranja);
+        }
+
+        .tips-header p {
+            color: var(--texto-light);
+            margin-top: 0.5rem;
+        }
+
+        .grocery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 0.8rem;
+        }
+
+        .grocery-item {
+            background: var(--blanco);
+            border-radius: 14px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            box-shadow: 0 2px 12px var(--sombra);
+            border: 1px solid rgba(45, 106, 79, 0.06);
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .grocery-item:hover {
+            transform: scale(1.04);
+            border-color: var(--verde-light);
+        }
+
+        .grocery-item .g-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .grocery-item .g-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* ====== FOOTER ====== */
+        footer {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--texto-light);
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(0,0,0,0.06);
+            margin-top: 3rem;
+        }
+
+        footer .footer-emoji {
+            font-size: 1.5rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* ====== ANIMATIONS ====== */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(8px); }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ====== RESPONSIVE ====== */
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 2.8rem; }
+            .day-header h2 { font-size: 1.5rem; }
+            .day-emoji { width: 48px; height: 48px; font-size: 1.8rem; }
+            .meal-card { padding: 1.2rem; }
+            .grocery-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+            .day-nav a { padding: 0.4rem 0.7rem; font-size: 0.78rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+    <div class="hero-badge">🌿 Plan alimenticio</div>
+    <h1>Dieta<br><span>Semanal</span></h1>
+    <p class="hero-sub">Comida mexicana rica, balanceada y sin gastar de más. ¡A darle!</p>
+    <div class="hero-icons">
+        <span>🥚</span>
+        <span>🍗</span>
+        <span>🥑</span>
+        <span>🌮</span>
+        <span>🍅</span>
+        <span>🫘</span>
+        <span>🍎</span>
+    </div>
+    <div class="scroll-indicator">⌄</div>
+</section>
+
+<!-- ==================== NAV ==================== -->
+<nav class="day-nav" id="dayNav">
+    <a href="#lunes">🌅 Lun</a>
+    <a href="#martes">🔥 Mar</a>
+    <a href="#miercoles">💪 Mié</a>
+    <a href="#jueves">⚡ Jue</a>
+    <a href="#viernes">🎯 Vie</a>
+    <a href="#sabado">🎉 Sáb</a>
+    <a href="#domingo">☀️ Dom</a>
+    <a href="#compras">🛒 Compras</a>
+</nav>
+
+<!-- ==================== CONTENIDO ==================== -->
+<main class="content">
+
+    <!-- ===== LUNES ===== -->
+    <section class="day-section fade-in" id="lunes">
+        <div class="day-header">
+            <div class="day-emoji">🌅</div>
+            <div>
+                <div class="day-number">Día 1</div>
+                <h2>Lunes</h2>
+            </div>
+        </div>
+
+        <div class="meal-card desayuno">
+            <div class="meal-type"><span class="meal-icon">🍳</span> Desayuno</div>
+            <p class="meal-desc"><strong>Huevos a la mexicana</strong> (2–3 huevos) + 2 tortillas + 1 naranja o papaya.</p>
+        </div>
+        <div class="meal-card colacion">
+            <div class="meal-type"><span class="meal-icon">🥒</span> Colación</div>
+            <p class="meal-desc">Pepino y jícama con limón.</p>
+        </div>
+        <div class="meal-card comida">
+            <div class="meal-type"><span class="meal-icon">🍽️</span> Comida</div>
+            <p class="meal-desc"><strong>Pechuga de pollo asada</strong> + arroz rojo (1 taza chica) + ensalada grande + 2 tortillas.</p>
+        </div>
+        <div class="meal-card cena">
+            <div class="meal-type"><span class="meal-icon">🌙</span> Cena</div>
+            <p class="meal-desc">2 <strong>tostadas horneadas</strong> con frijoles, pollo deshebrado, lechuga, jitomate y un poquito de crema o aguacate.</p>
+        </div>
+    </section>
+
+    <!-- ===== MARTES ===== -->
+    <section class="day-section fade-in" id="martes">
+        <div class="day-header">
+            <div class="day-emoji">🔥</div>
+            <div>
+                <div class="day-number">Día 2</div>
+                <h2>Martes</h2>
+            </div>
+        </div>
+
+        <div class="meal-card desayuno">
+            <div class="meal-type"><span class="meal-icon">🍳</span> Desayuno</div>
+            <p class="meal-desc"><strong>Avena cocida con canela</strong> + 1 plátano chico + 1 cucharada de cacahuate o nuez.</p>
+        </div>
+        <div class="meal-card colacion">
+            <div class="meal-type"><span class="meal-icon">🥛</span> Colación</div>
+            <p class="meal-desc">Yogur natural o griego sin azúcar.</p>
+        </div>
+        <div class="meal-card comida">
+            <div class="meal-type"><span class="meal-icon">🍽️</span> Comida</div>
+            <p class="meal-desc"><strong>Bistec asado</strong> + nopales con cebolla + frijoles de la olla + 2 tortillas.</p>
+        </div>
+        <div class="meal-card cena">
+            <div class="meal-type"><span class="meal-icon">🌙</span> Cena</div>
+            <p class="meal-desc"><strong>Quesadillas de panela o queso Oaxaca</strong> controlado, en tortilla de maíz, con champiñones o flor de calabaza + salsa.</p>
+        </div>
+    </section>
+
+    <!-- ===== MIÉRCOLES ===== -->
+    <section class="day-section fade-in" id="miercoles">
+        <div class="day-header">
+            <div class="day-emoji">💪</div>
+            <div>
+                <div class="day-number">Día 3</div>
+                <h2>Miércoles</h2>
+            </div>
+        </div>
+
+        <div class="meal-card desayuno">
+            <div class="meal-type"><span class="meal-icon">🍳</span> Desayuno</div>
+            <p class="meal-desc"><strong>2 huevos con nopales</strong> + 2 tortillas + café sin azúcar o con poca.</p>
+        </div>
+        <div class="meal-card colacion">
+            <div class="meal-type"><span class="meal-icon">🍏</span> Colación</div>
+            <p class="meal-desc">1 manzana.</p>
+        </div>
+        <div class="meal-card comida">
+            <div class="meal-type"><span class="meal-icon">🍽️</span> Comida</div>
+            <p class="meal-desc"><strong>Picadillo de res magra</strong> con papa y zanahoria, pero cargado de verdura + ensalada + 2 tortillas.</p>
+        </div>
+        <div class="meal-card cena">
+            <div class="meal-type"><span class="meal-icon">🌙</span> Cena</div>
+            <p class="meal-desc"><strong>Atún</strong> con jitomate, cebolla, limón y aguacate + galletas saladas integrales o 2 tostadas horneadas.</p>
+        </div>
+    </section>
+
+    <!-- ===== JUEVES ===== -->
+    <section class="day-section fade-in" id="jueves">
+        <div class="day-header">
+            <div class="day-emoji">⚡</div>
+            <div>
+                <div class="day-number">Día 4</div>
+                <h2>Jueves</h2>
+            </div>
+        </div>
+
+        <div class="meal-card desayuno">
+            <div class="meal-type"><span class="meal-icon">🍳</span> Desayuno</div>
+            <p class="meal-desc"><strong>Molletes ligeros:</strong> 1 bolillo chico o medio bolillo grande, frijoles y queso gratinado moderado + pico de gallo.</p>
+        </div>
+        <div class="meal-card colacion">
+            <div class="meal-type"><span class="meal-icon">🥕</span> Colación</div>
+            <p class="meal-desc">Zanahorias o pepino.</p>
+        </div>
+        <div class="meal-card comida">
+            <div class="meal-type"><span class="meal-icon">🍽️</span> Comida</div>
+            <p class="meal-desc"><strong>Filete de pescado a la plancha</strong> + calabacitas salteadas + arroz al vapor o 2 tortillas.</p>
+        </div>
+        <div class="meal-card cena">
+            <div class="meal-type"><span class="meal-icon">🌙</span> Cena</div>
+            <p class="meal-desc"><strong>Caldo de pollo</strong> con verduras + 2 tortillas.</p>
+        </div>
+    </section>
+
+    <!-- ===== VIERNES ===== -->
+    <section class="day-section fade-in" id="viernes">
+        <div class="day-header">
+            <div class="day-emoji">🎯</div>
+            <div>
+                <div class="day-number">Día 5</div>
+                <h2>Viernes</h2>
+            </div>
+        </div>
+
+        <div class="meal-card desayuno">
+            <div class="meal-type"><span class="meal-icon">🍳</span> Desayuno</div>
+            <p class="meal-desc"><strong>Licuado de avena</strong> con leche descremada o semidescremada, canela y plátano chico + 1 huevo cocido aparte.</p>
+        </div>
+        <div class="meal-card colacion">
+            <div class="meal-type"><span class="meal-icon">🍊</span> Colación</div>
+            <p class="meal-desc">1 mandarina o guayabas.</p>
+        </div>
+        <div class="meal-card comida">
+            <div class="meal-type"><span class="meal-icon">🍽️</span> Comida</div>
+            <p class="meal-desc"><strong>Tinga de pollo</strong> + ensalada + 2 tostadas horneadas o 2 tortillas.</p>
+        </div>
+        <div class="meal-card cena">
+            <div class="meal-type"><span class="meal-icon">🌙</span> Cena</div>
+            <p class="meal-desc"><strong>Ensalada grande</strong> con atún o panela: lechuga, pepino, jitomate, cebolla, aguacate y limón.</p>
+        </div>
+    </section>
+
+    <!-- ===== SÁBADO ===== -->
+    <section class="day-section fade-in" id="sabado">
+        <div class="day-header">
+            <div class="day-emoji">🎉</div>
+            <div>
+                <div class="day-number">Día 6</div>
+                <h2>Sábado</h2>
+            </div>
+        </div>
+
+        <div class="meal-card desayuno">
+            <div class="meal-type"><span class="meal-icon">🍳</span> Desayuno</div>
+            <p class="meal-desc"><strong>Chilaquiles caseros,</strong> porción moderada, rojos o verdes sin ahogarlos en crema; con pollo o huevo. ☕ Gustito semanal: café y 1 pan dulce, pero solo si no te descarrilas después.</p>
+        </div>
+        <div class="meal-card colacion">
+            <div class="meal-type"><span class="meal-icon">🥬</span> Colación</div>
+            <p class="meal-desc">Jícama o una fruta.</p>
+        </div>
+        <div class="meal-card comida">
+            <div class="meal-type"><span class="meal-icon">🍽️</span> Comida</div>
+            <p class="meal-desc"><strong>Fajitas de pollo</strong> con pimientos y cebolla + frijoles + 2 tortillas.</p>
+        </div>
+        <div class="meal-card cena">
+            <div class="meal-type"><span class="meal-icon">🌙</span> Cena</div>
+            <p class="meal-desc"><strong>Sincronizada ligera</strong> o quesadilla de jamón de pavo/panela + ensalada.</p>
+        </div>
+    </section>
+
+    <!-- ===== DOMINGO ===== -->
+    <section class="day-section fade-in" id="domingo">
+        <div class="day-header">
+            <div class="day-emoji">☀️</div>
+            <div>
+                <div class="day-number">Día 7</div>
+                <h2>Domingo</h2>
+            </div>
+        </div>
+
+        <div class="meal-card desayuno">
+            <div class="meal-type"><span class="meal-icon">🍳</span> Desayuno</div>
+            <p class="meal-desc"><strong>Huevos revueltos</strong> con jamón de pavo o con calabacita + 2 tortillas + fruta.</p>
+        </div>
+        <div class="meal-card colacion">
+            <div class="meal-type"><span class="meal-icon">🥜</span> Colación</div>
+            <p class="meal-desc">Yogur natural o un puñito de cacahuates.</p>
+        </div>
+        <div class="meal-card comida">
+            <div class="meal-type"><span class="meal-icon">🍽️</span> Comida</div>
+            <p class="meal-desc"><strong>Carne asada o pollo asado</strong> + guacamole moderado + nopales + cebollitas + 2 tortillas. Si hay arroz, baja a 1 tortilla.</p>
+        </div>
+        <div class="meal-card cena">
+            <div class="meal-type"><span class="meal-icon">🌙</span> Cena</div>
+            <p class="meal-desc"><strong>Sopa de verduras</strong> + sándwich de pechuga de pavo o panela en pan integral.</p>
+        </div>
+    </section>
+
+    <!-- ===== LISTA DE COMPRAS ===== -->
+    <section class="tips-section fade-in" id="compras">
+        <div class="tips-header">
+            <h2>🛒 Lista de Compras</h2>
+            <p>Cosas baratas que sí te ayudan un chingo</p>
+        </div>
+
+        <div class="grocery-grid">
+            <div class="grocery-item"><span class="g-icon">🥚</span><span class="g-name">Huevo</span></div>
+            <div class="grocery-item"><span class="g-icon">🐟</span><span class="g-name">Atún</span></div>
+            <div class="grocery-item"><span class="g-icon">🍗</span><span class="g-name">Pollo</span></div>
+            <div class="grocery-item"><span class="g-icon">🫘</span><span class="g-name">Frijol</span></div>
+            <div class="grocery-item"><span class="g-icon">🍚</span><span class="g-name">Arroz</span></div>
+            <div class="grocery-item"><span class="g-icon">🌮</span><span class="g-name">Tortillas</span></div>
+            <div class="grocery-item"><span class="g-icon">🥣</span><span class="g-name">Avena</span></div>
+            <div class="grocery-item"><span class="g-icon">🥛</span><span class="g-name">Yogur natural</span></div>
+            <div class="grocery-item"><span class="g-icon">🌵</span><span class="g-name">Nopales</span></div>
+            <div class="grocery-item"><span class="g-icon">🎃</span><span class="g-name">Calabaza</span></div>
+            <div class="grocery-item"><span class="g-icon">🥕</span><span class="g-name">Zanahoria</span></div>
+            <div class="grocery-item"><span class="g-icon">🥒</span><span class="g-name">Pepino</span></div>
+            <div class="grocery-item"><span class="g-icon">🍅</span><span class="g-name">Jitomate</span></div>
+            <div class="grocery-item"><span class="g-icon">🧅</span><span class="g-name">Cebolla</span></div>
+            <div class="grocery-item"><span class="g-icon">🥬</span><span class="g-name">Lechuga</span></div>
+            <div class="grocery-item"><span class="g-icon">🍌</span><span class="g-name">Plátano</span></div>
+            <div class="grocery-item"><span class="g-icon">🍈</span><span class="g-name">Papaya</span></div>
+            <div class="grocery-item"><span class="g-icon">🍎</span><span class="g-name">Manzana</span></div>
+        </div>
+    </section>
+
+</main>
+
+<!-- ==================== FOOTER ==================== -->
+<footer>
+    <span class="footer-emoji">🇲🇽🥑🌮</span>
+    <p>Dieta Semanal &mdash; Comer bien sin gastar de más</p>
+    <p style="margin-top: 0.3rem; opacity: 0.6;">Hecho con hambre y buena voluntad</p>
+</footer>
+
+<!-- ==================== JS ==================== -->
+<script>
+    // Intersection Observer para animaciones fade-in
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Highlight nav on scroll
+    const sections = document.querySelectorAll('.day-section, .tips-section');
+    const navLinks = document.querySelectorAll('.day-nav a');
+
+    const navObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.getAttribute('id');
+                navLinks.forEach(link => {
+                    link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+                });
+            }
+        });
+    }, { rootMargin: '-30% 0px -70% 0px' });
+
+    sections.forEach(section => navObserver.observe(section));
+
+    // Smooth scroll
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const target = document.querySelector(link.getAttribute('href'));
+            if (target) target.scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+</script>
+
+</body>
+</html>
